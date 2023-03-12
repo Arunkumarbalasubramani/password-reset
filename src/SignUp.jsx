@@ -6,6 +6,7 @@ import { useNavigate } from "react-router";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import Alert from "react-bootstrap/Alert";
+import axios from "axios";
 
 const userFormValidationSchema = yup.object({
   name: yup
@@ -24,8 +25,14 @@ const userFormValidationSchema = yup.object({
 });
 const SignUp = () => {
   const navigate = useNavigate();
+  const [success, setsuccess] = useState(false);
   const userSignUp = (signUpData) => {
-    console.log(signUpData);
+    axios
+      .post(
+        "https://password-reset-serverapp.onrender.com/user/signup",
+        signUpData
+      )
+      .then(() => setsuccess(true));
   };
   const { handleSubmit, values, errors, touched, handleBlur, handleChange } =
     useFormik({
@@ -40,7 +47,6 @@ const SignUp = () => {
       },
     });
 
-  const [success, setsuccess] = useState(true);
   return (
     <>
       {success ? (
