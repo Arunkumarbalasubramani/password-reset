@@ -2,6 +2,7 @@ import "./App.scss";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./Home";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route path="/" element={<SignIn />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/home" element={<Home />} />
         </Routes>
       </BrowserRouter>
     </div>
