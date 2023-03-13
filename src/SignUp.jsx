@@ -26,13 +26,29 @@ const userFormValidationSchema = yup.object({
 const SignUp = () => {
   const navigate = useNavigate();
   const [success, setsuccess] = useState(false);
-  const userSignUp = (signUpData) => {
-    axios
-      .post(
+  const [errorMessage, setErrorMessage] = useState("");
+  const userSignUp = async (signUpData) => {
+    try {
+      const response = await axios.post(
         "https://password-reset-serverapp.onrender.com/user/signup",
-        signUpData
-      )
-      .then(() => setsuccess(true));
+        JSON.stringify(signUpData),
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      console.log(JSON.stringify(response?.data));
+      setsuccess(true);
+    } catch (err) {
+      if (!err.response) {
+        setErrorMessage("No Server Response");
+      } else if (err.response?.status === 403) {
+        setErrorMessage("User Exists Already. Please Sign In");
+      } else if (err.response?.status === 403) {
+        setErrorMessage("Error While Siging Up");
+      } else {
+        setErrorMessage("SignUp Failes");
+      }
+    }
   };
   const { handleSubmit, values, errors, touched, handleBlur, handleChange } =
     useFormik({
@@ -49,6 +65,8 @@ const SignUp = () => {
 
   return (
     <>
+      {errorMessage ? <Alert variant="danger">{errorMessage}</Alert> : null}
+
       {success ? (
         <div className="signin-container">
           <h1>You Have Succefully Signed Up</h1>
@@ -119,9 +137,11 @@ const SignUp = () => {
               </div>
             </Form.Group>
 
-            <Button variant="contained" size="medium" type="submit">
-              Submit
-            </Button>
+            <div className="submit-btn">
+              <Button variant="contained" size="medium" type="submit">
+                Submit
+              </Button>
+            </div>
           </Form>
         </div>
       )}

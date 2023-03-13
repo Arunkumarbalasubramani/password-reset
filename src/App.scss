@@ -1,5 +1,4 @@
 .App {
-  text-align: center;
   background: linear-gradient(
     45deg,
     #e0fbfcff,
@@ -19,13 +18,14 @@
   font-size: 3.25rem;
   font-weight: 600;
   margin: 2%;
+  text-align: center;
 }
 .signin-container {
   margin: 4rem;
   padding: 1.5rem;
   // background: red;
   height: auto;
-  width: 34%;
+  width: 40%;
   border: 2px solid rgb(0, 0, 0);
   border-radius: 5px;
   @media screen and (max-width: 768px) {
@@ -48,9 +48,15 @@
   color: black;
   font-weight: 600;
   font-size: 1.2rem;
+  text-align: right;
 }
 
 .helper-text {
   display: flex;
   justify-content: space-around;
+}
+
+.submit-btn {
+  display: flex;
+  justify-content: center;
 }
