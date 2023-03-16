@@ -3,12 +3,67 @@ import { Nav } from "react-bootstrap";
 import Button from "@mui/material/Button";
 import Form from "react-bootstrap/Form";
 import { useNavigate } from "react-router";
+import * as yup from "yup";
+import { useFormik } from "formik";
+import Alert from "react-bootstrap/Alert";
+import CircularProgress from "@mui/material/CircularProgress";
+import axios from "axios";
 
+const loginValidationSchema = yup.object({
+  name: yup
+    .string()
+    .required("User Name is Mandatory")
+    .min(4, "Minimu 4 Characters required"),
+  password: yup
+    .string()
+    .required("Password is Mandatory")
+    .min(8, "Minimum 8 Characters Only")
+    .max(12, "Maximum 12 Characters only"),
+});
 const SignIn = () => {
   const navigate = useNavigate();
   const [success, setsuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const loginFunction = async (loginData) => {
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        "https://password-reset-serverapp.onrender.com/user/signin",
+        JSON.stringify(loginData),
+        { headers: { "Content-Type": "application/json" } }
+      );
+      setsuccess(true);
+      setLoading(false);
+    } catch (err) {
+      if (!err?.response) {
+        setErrorMessage("No Server Response");
+      } else if (err?.response.status === 401) {
+        setErrorMessage("  User Not Found.Please Sign Up");
+      } else if (err?.response.status === 403) {
+        setErrorMessage("Wrong Credentials");
+      } else {
+        setErrorMessage("Error While Siging in");
+      }
+    }
+  };
+  const { handleSubmit, handleBlur, handleChange, values, errors, touched } =
+    useFormik({
+      initialValues: {
+        name: "",
+        password: "",
+      },
+      validationSchema: loginValidationSchema,
+      onSubmit: (data) => {
+        loginFunction(data);
+      },
+    });
+
   return (
     <>
+      {errorMessage ? <Alert variant="danger">{errorMessage}</Alert> : null}
+      {loading ? <CircularProgress color="success" /> : null}
       {success ? (
         <div className="signin-container">
           <h1>You are Succefully Logged In</h1>
@@ -18,15 +73,39 @@ const SignIn = () => {
         </div>
       ) : (
         <div className="signin-container">
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label className="label-text">Email address</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" />
+              <Form.Label className="label-text">User Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter User Name"
+                name="name"
+                value={values.name}
+                error={touched.name && errors.name}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className="input-textbox"
+              />
+              {touched.name && errors.name ? (
+                <Alert variant="danger">{errors.name}</Alert>
+              ) : null}
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
               <Form.Label className="label-text">Password</Form.Label>
-              <Form.Control type="password" placeholder="Password" />
+              <Form.Control
+                type="password"
+                placeholder="Password"
+                name="password"
+                value={values.password}
+                error={touched.password && errors.password}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className="input-textbox"
+              />
+              {touched.password && errors.password ? (
+                <Alert variant="danger">{errors.password}</Alert>
+              ) : null}
             </Form.Group>
             <Form.Group
               className="mb-3 helper-text"
@@ -46,9 +125,11 @@ const SignIn = () => {
               </div>
             </Form.Group>
 
-            <Button variant="contained" size="medium">
-              Submit
-            </Button>
+            <div className="submit-btn">
+              <Button variant="contained" size="medium" type="submit">
+                Submit
+              </Button>
+            </div>
           </Form>
         </div>
       )}

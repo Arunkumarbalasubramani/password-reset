@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { Nav } from "react-bootstrap";
 import Button from "@mui/material/Button";
 import Form from "react-bootstrap/Form";
-import { useNavigate } from "react-router";
+import { useAsyncValue, useNavigate } from "react-router";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import Alert from "react-bootstrap/Alert";
 import axios from "axios";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const userFormValidationSchema = yup.object({
   name: yup
@@ -27,8 +28,10 @@ const SignUp = () => {
   const navigate = useNavigate();
   const [success, setsuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setloading] = useState(false);
   const userSignUp = async (signUpData) => {
     try {
+      setloading(true);
       const response = await axios.post(
         "https://password-reset-serverapp.onrender.com/user/signup",
         JSON.stringify(signUpData),
@@ -38,6 +41,7 @@ const SignUp = () => {
       );
       console.log(JSON.stringify(response?.data));
       setsuccess(true);
+      setloading(false);
     } catch (err) {
       if (!err.response) {
         setErrorMessage("No Server Response");
@@ -66,7 +70,7 @@ const SignUp = () => {
   return (
     <>
       {errorMessage ? <Alert variant="danger">{errorMessage}</Alert> : null}
-
+      {loading ? <CircularProgress color="success" /> : null}
       {success ? (
         <div className="signin-container">
           <h1>You Have Succefully Signed Up</h1>

@@ -3,6 +3,7 @@ import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./Home";
+import PasswordReset from "./PasswordReset";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/home" element={<Home />} />
+          <Route path="/password-reset" element={<PasswordReset />} />
         </Routes>
       </BrowserRouter>
     </div>
