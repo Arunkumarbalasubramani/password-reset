@@ -29,6 +29,7 @@ const SignUp = () => {
   const [success, setsuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setloading] = useState(false);
+
   const userSignUp = async (signUpData) => {
     try {
       setloading(true);

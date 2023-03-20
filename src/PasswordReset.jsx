@@ -19,12 +19,10 @@ const PasswordReset = () => {
       e.preventDefault();
       setLoading(true);
       const response = await axios.post(
-        "https://password-reset-serverapp.onrender.com/user/password-reset",
-        JSON.stringify(email),
-        {
-          headers: { "Content-Type": "application/json" },
-        }
+        "http://localhost:5000/api/user/passwordreset",
+        { email }
       );
+
       setSuccess(true);
       setLoading(false);
     } catch (error) {
