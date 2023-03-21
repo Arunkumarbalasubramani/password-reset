@@ -30,7 +30,7 @@ const SignIn = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "https://password-reset-serverapp.onrender.com/user/signin",
+        "https://password-reset-serverapp.onrender.com/api/user/signin",
         JSON.stringify(loginData),
         { headers: { "Content-Type": "application/json" } }
       );
@@ -39,12 +39,17 @@ const SignIn = () => {
     } catch (err) {
       if (!err?.response) {
         setErrorMessage("No Server Response");
-      } else if (err?.response.status === 401) {
+        setLoading(false);
+      } else if (err?.response.status === 404) {
         setErrorMessage("  User Not Found.Please Sign Up");
+        setLoading(false);
       } else if (err?.response.status === 403) {
         setErrorMessage("Wrong Credentials");
+        setLoading(false);
       } else {
-        setErrorMessage("Error While Siging in");
+        console.log(err.response);
+        setErrorMessage(` ${err.response.data.Error}`);
+        setLoading(false);
       }
     }
   };

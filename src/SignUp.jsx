@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Nav } from "react-bootstrap";
 import Button from "@mui/material/Button";
 import Form from "react-bootstrap/Form";
-import { useAsyncValue, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import * as yup from "yup";
 import { useFormik } from "formik";
 import Alert from "react-bootstrap/Alert";
@@ -34,7 +34,7 @@ const SignUp = () => {
     try {
       setloading(true);
       const response = await axios.post(
-        "https://password-reset-serverapp.onrender.com/user/signup",
+        "https://password-reset-serverapp.onrender.com/api/user/signup",
         JSON.stringify(signUpData),
         {
           headers: { "Content-Type": "application/json" },
@@ -46,12 +46,14 @@ const SignUp = () => {
     } catch (err) {
       if (!err.response) {
         setErrorMessage("No Server Response");
+        setloading(false);
       } else if (err.response?.status === 403) {
         setErrorMessage("User Exists Already. Please Sign In");
-      } else if (err.response?.status === 403) {
-        setErrorMessage("Error While Siging Up");
+        setloading(false);
       } else {
-        setErrorMessage("SignUp Failes");
+        console.log(err);
+        setErrorMessage(` ${err.response.data.Error}`);
+        setloading(false);
       }
     }
   };

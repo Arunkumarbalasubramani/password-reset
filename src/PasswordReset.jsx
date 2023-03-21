@@ -19,7 +19,7 @@ const PasswordReset = () => {
       e.preventDefault();
       setLoading(true);
       const response = await axios.post(
-        "http://localhost:5000/api/user/passwordreset",
+        "https://password-reset-serverapp.onrender.com/api/user/passwordreset",
         { email }
       );
 
@@ -33,7 +33,8 @@ const PasswordReset = () => {
         setError("User Does Not Exists. Please Sign UP");
         setLoading(false);
       } else {
-        setError("Error While Resetting Password");
+        setError(` ${error.response.data.Error}`);
+
         setLoading(false);
       }
     }
