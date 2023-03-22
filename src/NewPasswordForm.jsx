@@ -27,32 +27,35 @@ const NewPasswordForm = () => {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
-  const changePasswordFunction = async (passwordToBeChanged) => {
-    console.log(passwordToBeChanged);
+  const changePasswordFunction = async (data) => {
+    const passwordToBeChanged = { password: data.password };
+
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        "https://password-reset-serverapp.onrender.com/api/user/signin",
+        JSON.stringify(passwordToBeChanged),
+        { headers: { "Content-Type": "application/json" } }
+      );
+      setSuccess(true);
+      setLoading(false);
+    } catch (error) {
+      if (!error?.response) {
+        setError("No Server Response");
+        setLoading(false);
+      } else if (error?.response.status === 404) {
+        setError("  User Not Found.Please Sign Up");
+        setLoading(false);
+      } else {
+        console.log(error.response);
+        setError(` ${error.response.data.Error}`);
+        setLoading(false);
+      }
+    }
     // try {
-    //   setLoading(true);
-    //   const response = await axios.post(
-    //     "https://password-reset-serverapp.onrender.com/api/user/signin",
-    //     JSON.stringify(passwordToBeChanged),
-    //     { headers: { "Content-Type": "application/json" } }
-    //   );
-    //   setSuccess(true);
-    //   setLoading(false);
+    //
     // } catch (err) {
-    //   if (!err?.response) {
-    //     setError("No Server Response");
-    //     setLoading(false);
-    //   } else if (err?.response.status === 404) {
-    //     setError("  User Not Found.Please Sign Up");
-    //     setLoading(false);
-    //   } else if (err?.response.status === 403) {
-    //     setError("Wrong Credentials");
-    //     setLoading(false);
-    //   } else {
-    //     console.log(err.response);
-    //     setError(` ${err.response.data.Error}`);
-    //     setLoading(false);
-    //   }
+    //
     // }
   };
   const { handleSubmit, handleBlur, handleChange, values, errors, touched } =
