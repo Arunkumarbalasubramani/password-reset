@@ -13,7 +13,7 @@ const loginValidationSchema = yup.object({
   name: yup
     .string()
     .required("User Name is Mandatory")
-    .min(4, "Minimu 4 Characters required"),
+    .min(4, "Minimum 4 Characters required"),
   password: yup
     .string()
     .required("Password is Mandatory")
@@ -53,6 +53,7 @@ const SignIn = () => {
       }
     }
   };
+
   const { handleSubmit, handleBlur, handleChange, values, errors, touched } =
     useFormik({
       initialValues: {
