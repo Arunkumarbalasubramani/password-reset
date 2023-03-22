@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import Alert from "react-bootstrap/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { Nav } from "react-bootstrap";
 import { useFormik } from "formik";
 import * as yup from "yup";
@@ -21,6 +21,7 @@ const passwordValidationSchema = yup.object({
 });
 
 const NewPasswordForm = () => {
+  const { id, token } = useParams();
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
@@ -33,7 +34,7 @@ const NewPasswordForm = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        "https://password-reset-serverapp.onrender.com/api/user/signin",
+        `https://password-reset-serverapp.onrender.com/api/reset-password/${id}/${token}`,
         JSON.stringify(passwordToBeChanged),
         { headers: { "Content-Type": "application/json" } }
       );
@@ -48,7 +49,7 @@ const NewPasswordForm = () => {
         setLoading(false);
       } else {
         console.log(error.response);
-        setError(` ${error.response.data.Error}`);
+        setError(` ${error.response.data.Message}`);
         setLoading(false);
       }
     }
