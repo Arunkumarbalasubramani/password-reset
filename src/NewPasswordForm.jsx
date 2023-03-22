@@ -49,7 +49,7 @@ const NewPasswordForm = () => {
         setLoading(false);
       } else {
         console.log(error.response);
-        setError(` ${error.response.data.Message}`);
+        setError(` ${error.response.data.Error}`);
         setLoading(false);
       }
     }
