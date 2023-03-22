@@ -51,7 +51,6 @@ const SignUp = () => {
         setErrorMessage("User Exists Already. Please Sign In");
         setloading(false);
       } else {
-        console.log(err);
         setErrorMessage(` ${err.response.data.Error}`);
         setloading(false);
       }

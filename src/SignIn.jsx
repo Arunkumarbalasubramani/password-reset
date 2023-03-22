@@ -41,14 +41,13 @@ const SignIn = () => {
         setErrorMessage("No Server Response");
         setLoading(false);
       } else if (err?.response.status === 404) {
-        setErrorMessage("  User Not Found.Please Sign Up");
+        setErrorMessage("User Not Found.Please Sign Up");
         setLoading(false);
       } else if (err?.response.status === 403) {
         setErrorMessage("Wrong Credentials");
         setLoading(false);
       } else {
-        console.log(err.response);
-        setErrorMessage(` ${err.response.data.Error}`);
+        setErrorMessage(` ${err.response.data.Message}`);
         setLoading(false);
       }
     }
