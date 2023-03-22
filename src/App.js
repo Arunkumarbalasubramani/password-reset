@@ -4,6 +4,7 @@ import SignUp from "./SignUp";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./Home";
 import PasswordReset from "./PasswordReset";
+import NewPasswordForm from "./NewPasswordForm";
 
 function App() {
   return (
@@ -17,6 +18,10 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/home" element={<Home />} />
           <Route path="/password-reset" element={<PasswordReset />} />
+          <Route
+            path="/user/resetpassword/:id/:token"
+            element={<NewPasswordForm />}
+          />
         </Routes>
       </BrowserRouter>
     </div>
